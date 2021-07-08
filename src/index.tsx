@@ -1,6 +1,8 @@
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
-import Home from "./Home.jsx";
+import Home from "./Home";
+import "antd/dist/antd.css";
+import "./index.css";
 
 ReactDOM.render(<Home />, document.getElementById("root"));
 

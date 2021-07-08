@@ -1,13 +1,31 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
+import App from "./App";
+import { HomeContext } from "./Home";
 
-const Home = () => {
+const ChessRoom = () => {
   const [state, setState] = useState({
     left: 100,
     top: 100
   });
 
   const ref = useRef(null);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress);
+
+    if (!ref.current) {
+      ref.current = io(process.env.REACT_APP_SOCKET_URL);
+    }
+    ref.current.on("move", data => {
+      setState(prev => {
+        return {
+          left: prev.left + data.leftRightValue,
+          top: prev.top + data.upDownValue
+        };
+      });
+    });
+  }, []);
 
   const handleKeyPress = event => {
     const moveUnit = 10;
@@ -35,35 +53,19 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
+  const setContentComponent = useContext(HomeContext);
 
-    if (!ref.current) {
-      ref.current = io("http://10.14.3.8:4000/");
-    }
-    ref.current.on("move", data => {
-      setState(prev => {
-        return {
-          left: prev.left + data.leftRightValue,
-          top: prev.top + data.upDownValue
-        };
-      });
+  const buttonOnClick = () => {
+    setContentComponent(() => {
+      return <App str={"hello~"}></App>;
     });
-  }, []);
+  };
 
   return (
     <>
-      <button
-        style={{
-          position: "absolute",
-          left: state.left + "px",
-          top: state.top + "px"
-        }}
-      >
-        Hello
-      </button>
+      <button onClick={buttonOnClick}>Hello</button>
     </>
   );
 };
 
-export default Home;
+export default ChessRoom;

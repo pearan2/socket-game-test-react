@@ -3,8 +3,14 @@ import reportWebVitals from "./reportWebVitals";
 import Home from "./Home";
 import "antd/dist/antd.css";
 import "./index.css";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-ReactDOM.render(<Home />, document.getElementById("root"));
+ReactDOM.render(
+  <BrowserRouter>
+    <Home></Home>
+  </BrowserRouter>,
+  document.getElementById("root")
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
